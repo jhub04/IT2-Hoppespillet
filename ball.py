@@ -1,6 +1,6 @@
-import pygame
-pygame.init()
-clock = pygame.time.Clock()
+import pg
+pg.init()
+clock = pg.time.Clock()
 
 
 width = 320
@@ -10,14 +10,14 @@ speedY = 2
 black = (0, 0, 0)
 running = True
 
-screen = pygame.display.set_mode((width, height))
+screen = pg.display.set_mode((width, height))
 
-ball = pygame.image.load("intro_ball.gif")
+ball = pg.image.load("intro_ball.gif")
 ballrect = ball.get_rect()
 
 while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+    for event in pg.event.get():
+        if event.type == pg.QUIT:
             running = False
 
     ballrect = ballrect.move((speedX,speedY))
@@ -30,8 +30,8 @@ while running:
     screen.blit(ball, ballrect)
     
 
-    pygame.display.flip()
+    pg.display.flip()
 
     clock.tick(60)  # limits FPS to 60
 
-pygame.quit()
+pg.quit()

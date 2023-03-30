@@ -1,22 +1,22 @@
-import pygame as pg
+import pg
 import sys
 import random
 
 pg.init()
 
-SCREEN_WIDTH, SCREEN_HEIGHT = 800, 300
-screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pg.display.set_caption("Hoppe Spill")
+SKJERM_BREDDE, SKJERM_HOYDE = 800, 300
+screen = pg.display.set_mode((SKJERM_BREDDE, SKJERM_HOYDE))
+pg.display.set_caption("Dino Run")
 
 clock = pg.time.Clock()
 
-class Player(pg.sprite.Sprite):
+class Dino(pg.sprite.Sprite):
     def __init__(self):
         super().__init__()
         self.image = pg.Surface((40, 40))
         self.image.fill((255, 0, 0))
         self.rect = self.image.get_rect()
-        self.rect.x, self.rect.y = 50, SCREEN_HEIGHT - 40
+        self.rect.x, self.rect.y = 50, SKJERM_HOYDE - 40
         self.jump_height = 20
         self.is_jumping = False
         self.gravity = 10
@@ -29,14 +29,14 @@ class Player(pg.sprite.Sprite):
                 self.is_jumping = False
                 self.jump_height = 20
         else:
-            if self.rect.y < SCREEN_HEIGHT - 40:
+            if self.rect.y < SKJERM_HOYDE - 40:
                 self.rect.y += self.gravity
                 self.gravity += 1
             else:
                 self.gravity = 10
 
     def jump(self):
-        if self.rect.y == SCREEN_HEIGHT - 40:
+        if self.rect.y == SKJERM_HOYDE - 40:
             self.is_jumping = True
 
 
@@ -47,12 +47,12 @@ class Obstacle(pg.sprite.Sprite):
         self.image = pg.Surface((40, 40))
         self.image.fill((0, 255, 0))
         self.rect = self.image.get_rect()
-        self.rect.x, self.rect.y = SCREEN_WIDTH, SCREEN_HEIGHT - 40
+        self.rect.x, self.rect.y = SKJERM_BREDDE, SKJERM_HOYDE - 40
 
     def update(self):
         self.rect.x -= 5
 
-player = Player()
+player = Dino()
 obstacles = pg.sprite.Group()
 sprites = pg.sprite.Group()
 sprites.add(player)
