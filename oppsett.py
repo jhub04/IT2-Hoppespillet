@@ -4,7 +4,7 @@ import random
 
 pg.init()
 
-SCREEN_WIDTH, SCREEN_HEIGHT = 800, 300
+SCREEN_WIDTH, SCREEN_HEIGHT = 920, 600
 screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pg.display.set_caption("Hoppe Spill")
 
@@ -50,12 +50,27 @@ class Obstacle(pg.sprite.Sprite):
         self.rect.x, self.rect.y = SCREEN_WIDTH, SCREEN_HEIGHT - 40
 
     def update(self):
-        self.rect.x -= 5
+        self.rect.x -= 10
 
 player = Player()
 obstacles = pg.sprite.Group()
 sprites = pg.sprite.Group()
 sprites.add(player)
+
+font = pg.font.Font(None, 36)
+
+score = 0
+score_timer = pg.time.get_ticks()
+
+def draw_text(screen, text, font, color=(255, 0, 0)):
+    text_surface = font.render(text, True, color)
+    text_rect = text_surface.get_rect()
+    text_rect.topleft = (SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
+    screen.blit(text_surface, text_rect)
+
+
+obstacle_counter = 0
+min_space_between_obstacles = 30  # You can adjust this value to control the space between obstacles
 
 while True:
     clock.tick(60)
@@ -68,17 +83,30 @@ while True:
             if event.key == pg.K_SPACE:
                 player.jump()
 
-    if random.randint(1, 100) <= 2:
-        obstacle = Obstacle()
-        obstacles.add(obstacle)
-        sprites.add(obstacle)
+    if obstacle_counter >= min_space_between_obstacles:
+        if random.randint(1, 100) <= 1:
+            obstacle = Obstacle()
+            obstacles.add(obstacle)
+            sprites.add(obstacle)
+            obstacle_counter = 0  # Reset the counter when an obstacle is spawned
+    else:
+        obstacle_counter += 1
 
     sprites.update()
     screen.fill((0, 0, 0))
     sprites.draw(screen)
+
+    current_time = pg.time.get_ticks()
+    if current_time - score_timer >= 1000:  # Check if 1 second (1000 ms) has passed
+        score += 1
+        score_timer = current_time
+
+    text = f"Distanse: {score}"
+    draw_text(screen, text, font)
 
     if pg.sprite.spritecollideany(player, obstacles):
         pg.quit()
         sys.exit()
 
     pg.display.flip()
+
